@@ -1,0 +1,9 @@
+<div>
+    <h3>List name: {{ime}}</h3>
+    <ul>
+        <li *ngFor="let hero of heroes">{{hero}}</li>
+    </ul>
+    <br>
+    <br>
+    <h5> Change list name:</h5><input type="text" [(ngModel)]="ime" />
+</div>
