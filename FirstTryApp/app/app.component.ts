@@ -19,6 +19,7 @@ export class AppComponent implements OnInit {
 	neshtosi = true;
 
 	heroesList: Hero[];
+	pesholist: Hero[] = [{name: '1'}, {name: '2'}]
 	postList: any[] = [];
 
 	constructor(private hs:HeroService){
@@ -26,10 +27,11 @@ export class AppComponent implements OnInit {
 	}
 	ngOnInit(){
 		this.hs.getPosts().subscribe(response => this.postList=response)
+		this.heroesList = this.hs.getHeroes();
 	}
 
 	logHero(e: Hero){
-		console.log(e)
+		console.log(e.name)
 	}
 	toggleVisibility(){
 		this.visible = !this.visible;

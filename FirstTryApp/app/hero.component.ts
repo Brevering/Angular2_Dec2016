@@ -10,9 +10,7 @@ export class HeroComponent implements OnInit {
 powers = ['Really Smart', 'Super Flexible', 'Super Hot', 'Weather Changer'];
 @Input() heroes: Hero[];
 @Output() clicked = new EventEmitter();
-submitted = false;
 title: string = 'My superheroes'
-onSubmit() { this.submitted = true; }
 
 onClicked(e: Hero){
     console.log(e);

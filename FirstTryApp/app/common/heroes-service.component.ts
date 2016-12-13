@@ -9,13 +9,13 @@ import 'rxjs/add/operator/catch';
 @Injectable()
 export class HeroService {
 
-heroes: Hero[] = [{name:'Pesho'}, {name: 'Gosho'}, {name: 'Atanas'}];
+heroes1: Hero[] = [{name:'Pesho'}, {name: 'Gosho'}, {name: 'Atanas'}];
 
 
     constructor( private ht:Http) { }
 
     getHeroes(){
-        return this.heroes;
+        return this.heroes1;
     }
     getPosts(){
         return this.ht.get('http://jsonplaceholder.typicode.com/posts')
