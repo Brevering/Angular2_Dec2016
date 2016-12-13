@@ -1,9 +1,11 @@
 <div>
-    <h3>List name: {{ime}}</h3>
+    <h3>List name: {{title}}</h3>
     <ul>
-        <li *ngFor="let hero of heroes">{{hero}}</li>
+        <li *ngFor="let hero of heroes" (click)='onClicked(hero)'>{{hero.name}}</li>
     </ul>
     <br>
     <br>
-    <h5> Change list name:</h5><input type="text" [(ngModel)]="ime" />
+    <h5> Change list name:</h5>
+    <input #gosho type="text" [(ngModel)]="title" />
 </div>
+<div> {{gosho.value}}</div>
