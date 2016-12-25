@@ -6,18 +6,18 @@ import {Observable} from 'rxjs/Observable';
 export class MoviesService {
     constructor(private http: Http) { }
 
-    getMovies() {
+    getMovies(startpoint: number) {
         let observableBatch: any[] = [];
-        let a: number = 3748508;
-        while (a <= 3748528) {
+        let a: number = startpoint;
+        while (a <= startpoint + 100) {
             observableBatch.push(this.http.get('http://www.omdbapi.com/?i=tt' + padLeft(a, 7, '0') + '&type=movie&r=json')
-                                    .map((response: Response) => response.json()))
+                                    .map((response: Response) => response.json()));
             a++;
         };
         return Observable.forkJoin(observableBatch);
     }
 }
 
-function padLeft(nr: number, n: number, str: string){
-        return Array(n-String(nr).length+1).join(str||'0')+nr;
+function padLeft(nr: number, n: number, str: string) {
+        return Array(n - String(nr).length + 1).join(str || '0') + nr;
       }
