@@ -1,23 +1,39 @@
 import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
 import {Observable} from 'rxjs/Observable';
+import { MovieModel } from './';
 
 @Injectable()
 export class MoviesService {
+    private imdbIds: string[] = [];
+
     constructor(private http: Http) { }
 
-    getMovies(startpoint: number) {
+    datiebamakqta(startpoint: number){
+        return this.readIdList()
+        .flatMap((response) => this.getMovies(startpoint, response));
+    }
+
+    getMovies(startpoint: number, arr: any) {
         let observableBatch: any[] = [];
         let a: number = startpoint;
-        while (a <= startpoint + 100) {
-            observableBatch.push(this.http.get('http://www.omdbapi.com/?i=tt' + padLeft(a, 7, '0') + '&type=movie&r=json')
+        console.log(arr);
+        while (a <= startpoint + 101) {
+            observableBatch.push(this.http.get('http://www.omdbapi.com/?i=' + arr[a].imdbId + '&type=movie&r=json')
                                     .map((response: Response) => response.json()));
             a++;
         };
         return Observable.forkJoin(observableBatch);
     }
-}
 
-function padLeft(nr: number, n: number, str: string) {
-        return Array(n - String(nr).length + 1).join(str || '0') + nr;
-      }
+    readIdList() {
+        return this.http.get('../data/moviesImdbIds.json')
+            .map((response: Response) => response.json());
+    }
+
+    getMovie(imdbId: string): Observable<MovieModel> {
+        return this.http.get('http://www.omdbapi.com/?i=' + imdbId)
+            .map((response: Response) => response.json());
+    }
+
+    }

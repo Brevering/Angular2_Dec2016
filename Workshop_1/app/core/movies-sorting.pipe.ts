@@ -6,25 +6,34 @@ import { MovieModel } from '../core/';
 })
 
 export class MoviesSortingPipe implements PipeTransform {
-    transform(movies: MovieModel[], parameters: string[]): MovieModel[] {
-        if (!movies) {
+    transform(value: MovieModel[], property: string, direction: string): MovieModel[] {
+        if (!value) {
             return [];
         }
-        return movies.sort((a, b) => {
-            switch (parameters[0]) {
-                case 'Title':
-                    return parameters[1] === 'asc' ?
+
+        switch (property) {
+            case 'Title':
+                value.sort((a, b) => {
+                    return direction === 'asc' ?
                         a.Title.localeCompare(b.Title) :
                         b.Title.localeCompare(a.Title);
-                case 'Rating':
-                    return parameters[1] === 'asc' ?
+                });
+                break;
+            case 'Rating':
+                value.sort((a, b) => {
+                    return direction === 'asc' ?
                         +a.imdbRating - +b.imdbRating :
                         +b.imdbRating - +a.imdbRating;
-                case 'Year':
-                    return parameters[1] === 'asc' ?
+                });
+                break;
+            case 'Year':
+                value.sort((a, b) => {
+                    return direction === 'asc' ?
                         +a.Year - +b.Year :
                         +b.Year - +a.Year;
-            }
-        });
+                });
+        }
+
+        return value.slice(0);
     }
 }

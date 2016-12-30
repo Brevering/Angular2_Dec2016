@@ -1,6 +1,6 @@
 <div class="container">
     <div class="row">
-        <h1 class="text-center">{{pageTitle}}</h1>
+        <h1 class="text-center">{{pageTitle}} Total: {{movies.length}}</h1>
         <div class="input-group col-md-offset-3 col-md-6">
             <span class="input-group-addon" id="basic-addon1">Search: </span>
             <input type="text" class="form-control" placeholder="Search..." (input)="onInput($event)" />
@@ -12,8 +12,8 @@
         <select 
             class="form-control" 
             id="sel1" 
-            (change)="onSortChange($event)">
-            <option *ngFor="let prop of sortingProperties" [selected]="sortingProperty === prop" value="{{prop}}">{{prop}}</option>
+            [(ngModel)]="sortingProperty">
+            <option *ngFor="let prop of sortingProperties" value="{{prop}}">{{prop}}</option>
         </select>
     </div>
     <div class="form-group col-md-4 col-md-offset-1">
@@ -21,21 +21,26 @@
         <select 
             class="form-control" 
             id="sel2" 
-            (change)="onDirectionChange($event)">
-            <option [selected]="direction === 'asc'" value="asc">Ascending</option>
-            <option [selected]="direction === 'desc'" value="desc">Descending</option>
+            [(ngModel)]="direction">
+            <option value="asc">Ascending</option>
+            <option value="desc">Descending</option>
         </select>
     </div>
-    <hr />
+    <br />
     <table class="table">
         <thead>
-            <th>Poster</th>
             <th>Title</th>
             <th>Year</th>
             <th>ImdbRating</th>
         </thead>
         <tbody>
-            <tr mvdb-movie-short *ngFor="let movie of (movies | moviesFilter:filterText | moviesSort:[sortingProperty, direction])" [movie]="movie"></tr>
+            <tr mvdb-movie-short 
+                *ngFor="let movie of movies | moviesFilter:filterText | moviesSort:sortingProperty:direction | moviesPaging:currentPage:pageSize"
+                [movie]="movie"></tr>
         </tbody>
+        <tfoot>
+            <app-pager [numberOfPages]="numberOfPages"
+                (pageChanged)="onPageChange($event)"></app-pager>
+        </tfoot>
     </table>
 </div>

@@ -1,7 +1,4 @@
 <td>
-    <img [src]="poster" [alt]="title">
-</td>
-<td>
     {{title}}
 </td>
 <td>
@@ -9,4 +6,9 @@
 </td>
 <td>
     {{imdbRating}}
+</td>
+<td>
+    <a 
+        class="btn btn-primary" 
+        [routerLink]="['/' + movie.imdbID + '/details']">DETAILS</a>
 </td>

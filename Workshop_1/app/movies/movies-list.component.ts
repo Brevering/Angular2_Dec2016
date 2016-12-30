@@ -1,34 +1,47 @@
 import { Component, OnInit } from '@angular/core';
 import { MovieModel, MoviesService } from '../core/';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
     selector: 'mvdb-movies-list',
     templateUrl: './movies-list.component.html'
 })
 export class MoviesListComponent implements OnInit {
-    private movies: MovieModel[] = [];
+    private movies: MovieModel[];
     private movies2: any[];
     private sortingProperties: string[];
     private pageTitle: string;
     private filterText: string;
     private sortingProperty: string;
     private direction: string;
-    private startingPoint = 3748500; // this "magic number" is so it does not start with the oldest crap :)
+    private startingPoint = 0;
+    private pageSize: number;
+    private currentPage: number;
+    private numberOfPages: number;
 
-    constructor(private moviesService: MoviesService) { }
+    constructor(private moviesService: MoviesService, private router: Router, private route: ActivatedRoute ) { }
 
     ngOnInit() {
+        this.route.params
+            .map(params => params['page'])
+            .subscribe((page) => {
+                this.currentPage = page;
+            });
+        this.pageSize = 20;
+        this.currentPage = this.route.snapshot.params['page'];
         this.pageTitle = 'The Movies List';
         this.sortingProperties = ['Title', 'Rating', 'Year'];
         this.sortingProperty = 'Rating';
         this.direction = 'desc';
+        this.movies = [];
+        this.numberOfPages = 1;
         this.populateList();
 
     }
 
     populateList() {
 
-        this.moviesService.getMovies(this.startingPoint)
+        this.moviesService.datiebamakqta(this.startingPoint)
         // imdb ids are not consecutive, so some may return error. This filters them out
             .subscribe(response => {
                 this.movies2 = response.filter(item => item.hasOwnProperty('Title'));
@@ -43,13 +56,15 @@ export class MoviesListComponent implements OnInit {
                 this.movies = this.movies.filter(movie => movie.Type === 'movie');
                 // and the ones with no posters... ;)
                 this.movies = this.movies.filter(movie => movie.Poster.length > 5 );
-                // search the next 100 nbrs
+                // increment the starting point
                 this.startingPoint += 100;
 
                 // call the populate function until we get at least 50 movies with posters ;)
                 if (this.movies.length < 50) {
                     this.populateList();
                 }
+
+                this.numberOfPages = Math.ceil(this.movies.length / this.pageSize);
 
                 });
     }
@@ -58,11 +73,15 @@ export class MoviesListComponent implements OnInit {
         this.filterText = e.target.value;
     }
 
-    onSortChange(e: any) {
+    onSortingPropertyChange(e: any) {
         this.sortingProperty = e.target.value;
     }
 
-    onDirectionChange(e: any) {
+    onSortingDirectionChange(e: any) {
         this.direction = e.target.value;
+    }
+
+    onPageChange(page: number) {
+        this.currentPage = this.route.snapshot.params['page'];
     }
 }
