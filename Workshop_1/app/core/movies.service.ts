@@ -15,9 +15,9 @@ export class MoviesService {
     }
 
     getMovies(startpoint: number, arr: any) {
+        console.log(startpoint)
         let observableBatch: any[] = [];
         let a: number = startpoint;
-        console.log(arr);
         while (a <= startpoint + 101) {
             observableBatch.push(this.http.get('http://www.omdbapi.com/?i=' + arr[a].imdbId + '&type=movie&r=json')
                                     .map((response: Response) => response.json()));

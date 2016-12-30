@@ -80,8 +80,4 @@ export class MoviesListComponent implements OnInit {
     onSortingDirectionChange(e: any) {
         this.direction = e.target.value;
     }
-
-    onPageChange(page: number) {
-        this.currentPage = this.route.snapshot.params['page'];
-    }
 }
